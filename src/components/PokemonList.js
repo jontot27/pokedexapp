@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import { IndexedPokemon, ListPokemon } from "../interface/pokemon.interface.ts";
-import PokemonCard from "./PokemonCard.js";
+import PokemonCard from "./PokemonCard.tsx";
 
 interface PokemonListProps {
   pokemons: ListPokemon;

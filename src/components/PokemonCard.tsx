@@ -16,37 +16,38 @@ interface PokemonCardProps {
 }
 
 const PokemonCard = ({ pokemon }: PokemonCardProps) => {
-  // const [pokemonColor, setPokemonColor] = (useState < string) | (null > null);
+  const [pokemonColor, setPokemonColor] = useState<string | null>(null);
 
-  // const getPokemonColor = async () => {
-  //   const color = await getColorFromUrl(pokemon.image);
-  //   if (color) setPokemonColor(color);
-  // };
+  const getPokemonColor = async () => {
+    const color = await getColorFromUrl(pokemon.image);
+    if (color) setPokemonColor(color);
+  };
 
-  // useEffect(() => {
-  //   getPokemonColor();
-  // }, []);
+  useEffect(() => {
+    getPokemonColor();
+  }, []);
 
-  //sx={{ backgroundColor: pokemonColor }}
+  //
   return (
-    <Card>
-      <div className={style.card}>
-        <CardActionArea>
-          <Link to={`pokemon/${pokemon.name}`}>
-            <CardMedia
-              component="img"
-              image={pokemon.image}
-              title={pokemon.name}
-            />
-            <CardContent>
-              <Box className={style.box}>
-                <div>{pokemon.name}</div>
-                <div>#{pokemon.pokedexNumber}</div>
-              </Box>
-            </CardContent>
-          </Link>
-        </CardActionArea>
-      </div>
+    <Card sx={{ backgroundColor: pokemonColor }}>
+      <CardActionArea>
+        <Link
+          to={`pokemon/${pokemon.name}`}
+          style={{ textDecoration: "none", color: "white" }}
+        >
+          <CardMedia
+            component="img"
+            image={pokemon.image}
+            title={pokemon.name}
+          />
+          <CardContent>
+            <Box className={style.box}>
+              <div>{pokemon.name}</div>
+              <div>#{pokemon.pokedexNumber}</div>
+            </Box>
+          </CardContent>
+        </Link>
+      </CardActionArea>
     </Card>
   );
 };

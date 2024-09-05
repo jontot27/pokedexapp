@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { POKEMON_API_POKEMON_URL } from "../constants.ts";
 import { DetailPokemon } from "../interface/pokemon.interface";
 import { httpClient } from "../api/httpClient.ts";
+import { getColorFromUrl } from "../utils/color.ts";
 
 interface UsePokemonProps {
   pokemonName: string | undefined;
@@ -15,6 +16,21 @@ const usePokemon = ({ pokemonName }: UsePokemonProps) => {
       fetchPokemon();
     }
   }, [pokemonName]);
+
+  useEffect(() => {
+    if (pokemon) {
+      getPokemonColor();
+    }
+  }, [pokemon]);
+
+  const getPokemonColor = async () => {
+    if (pokemon?.sprites.other["official-artwork"]?.front_default) {
+      const color = await getColorFromUrl(
+        pokemon.sprites.other["official-artwork"].front_default
+      );
+      if (color) setPokemon({ ...pokemon, color });
+    }
+  };
 
   const fetchPokemon = async () => {
     if (pokemonName) {

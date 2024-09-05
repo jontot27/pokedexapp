@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import usePokemon from "../hooks/usePokemon.ts";
 import { Container, Box } from "@mui/system";
 import { Grid } from "@mui/material";
+import PokemonAvatar from "./PokemonAvatar.tsx";
 
 const PokemonDetails = () => {
   let { pokemonName } = useParams();
@@ -27,7 +28,9 @@ const PokemonDetails = () => {
           {isLoading ? (
             <Box>Loading...</Box>
           ) : pokemon ? (
-            <>{pokemon.name}</>
+            <Grid item sx={12} sm={6}>
+              <PokemonAvatar pokemon={pokemon} />
+            </Grid>
           ) : (
             <Box>Pokemon Not Found</Box>
           )}

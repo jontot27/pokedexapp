@@ -3,12 +3,14 @@ import {
   IndexedPokemon,
   PokemonListResponse,
   ListPokemon,
+  IndexedPokemonByTypeListResponse,
 } from "../interface/pokemon.interface";
 import { httpClient } from "../api/httpClient.ts";
 import {
   POKEMON_API_BASE_URL,
   POKEMON_API_POKEMON_URL,
   POKEMON_IMAGES_BASE_URL,
+  POKEMON_TYPES,
 } from "../constants.ts";
 
 const usePokemons = () => {
@@ -16,9 +18,30 @@ const usePokemons = () => {
   const [nextUrl, setNextUrl] = useState<string | null>(
     POKEMON_API_POKEMON_URL
   );
+  const [selectedType, setSelectedType] = useState<IndexedType | null>(null);
+
   useEffect(() => {
-    fetchPokemon();
-  }, []);
+    if (selectedType) {
+      fetchPokemonByType();
+    } else {
+      fetchPokemon();
+    }
+  }, [selectedType]);
+
+  const fetchPokemonByType = async () => {
+    if (selectedType) {
+      const result = await httpClient.get<IndexedPokemonByTypeListResponse>(
+        selectedType.url
+      );
+      if (result?.data?.pokemon) {
+        const listPokemons = result.data.pokemon.map((p) =>
+          IndexedPokemonToListPokemon(p.pokemon)
+        );
+        setPokemons(listPokemons);
+        setNextUrl(POKEMON_API_POKEMON_URL);
+      }
+    }
+  };
 
   const IndexedPokemonToListPokemon = (indexedPokemon: IndexedPokemon) => {
     const pokedexNumber = parseInt(
@@ -53,6 +76,10 @@ const usePokemons = () => {
     pokemons,
     fetchNextPage: fetchPokemon,
     hasMorePokemon: !!nextUrl,
+    pokemonTypes: POKEMON_TYPES,
+    selectedType,
+    setSelectedType,
+    setPokemons,
   };
 };
 
